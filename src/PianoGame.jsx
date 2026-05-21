@@ -61,6 +61,57 @@ const BASS_STAFF = [
   { note:"C4",  line:4,   ledger:true },
 ];
 
+// ─────────────────────────────────────────────────────────────────────────────
+// KEY SIGNATURES
+// ─────────────────────────────────────────────────────────────────────────────
+
+const SHARP_POSITIONS  = [5, 4.5, 5.5, 5, 4.5, 5, 5.5 ]; // F C G D A E B
+const FLAT_POSITIONS   = [7, 7.5, 6.5, 7, 7.5, 6.5, 7  ]; // B E A D G C F
+const SHARP_NOTE_NAMES = ["F","C","G","D","A","E","B"];
+const FLAT_NOTE_NAMES  = ["B","E","A","D","G","C","F"];
+
+const KEY_SIGNATURES = [
+  { name:"Do Mayor",    sharps:[], flats:[], display:"0 alteraciones" },
+  { name:"Sol Mayor",   sharps:["F"], flats:[], display:"1♯ (Fa#)" },
+  { name:"Fa Mayor",    sharps:[], flats:["B"], display:"1♭ (Sib)" },
+  { name:"Re Mayor",    sharps:["F","C"], flats:[], display:"2♯ (Fa# Do#)" },
+  { name:"Sib Mayor",   sharps:[], flats:["B","E"], display:"2♭ (Sib Mib)" },
+  { name:"La Mayor",    sharps:["F","C","G"], flats:[], display:"3♯ (Fa# Do# Sol#)" },
+  { name:"Mib Mayor",   sharps:[], flats:["B","E","A"], display:"3♭ (Sib Mib Lab)" },
+  { name:"Mi Mayor",    sharps:["F","C","G","D"], flats:[], display:"4♯" },
+  { name:"Lab Mayor",   sharps:[], flats:["B","E","A","D"], display:"4♭" },
+  { name:"Si Mayor",    sharps:["F","C","G","D","A"], flats:[], display:"5♯" },
+  { name:"Reb Mayor",   sharps:[], flats:["B","E","A","D","G"], display:"5♭" },
+  { name:"Fa# Mayor",   sharps:["F","C","G","D","A","E"], flats:[], display:"6♯" },
+  { name:"Solb Mayor",  sharps:[], flats:["B","E","A","D","G","C"], display:"6♭" },
+  { name:"Do# Mayor",   sharps:["F","C","G","D","A","E","B"], flats:[], display:"7♯" },
+  { name:"Dob Mayor",   sharps:[], flats:["B","E","A","D","G","C","F"], display:"7♭" },
+];
+
+const TREBLE_NATURAL_POOL = ["C4","D4","E4","F4","G4","A4","B4","C5","D5","E5","F5","G5","A5"];
+const BASS_NATURAL_POOL   = ["E2","F2","G2","A2","B2","C3","D3","E3","F3","G3","A3","B3","C4"];
+
+function applyKeySignature(writtenNote, keySig) {
+  const m = writtenNote.match(/^([A-G])(\d)$/);
+  if (!m) return writtenNote;
+  const letter = m[1], oct = m[2];
+  if (keySig.sharps.includes(letter)) return `${letter}#${oct}`;
+  if (keySig.flats.includes(letter))  return `${letter}b${oct}`;
+  return writtenNote;
+}
+
+const LEVEL7 = {
+  id: 7,
+  name: "Armaduras",
+  clef: "treble",
+  showLabel: false,
+  chords: false,
+  accidentals: false,
+  keySigMode: true,
+  notePool: TREBLE_NATURAL_POOL,
+  description: "Armaduras de clave · 15 escalas mayores · Sin nombres",
+};
+
 // Level definitions
 const LEVELS = [
   {
@@ -70,7 +121,6 @@ const LEVELS = [
     showLabel: true,
     chords: false,
     accidentals: false,
-    // Full treble range: C4–A5 (natural notes only)
     notePool: ["C4","D4","E4","F4","G4","A4","B4","C5","D5","E5","F5","G5","A5"],
     description: "Notas naturales · Clave de Sol · Con nombres",
   },
@@ -91,7 +141,6 @@ const LEVELS = [
     showLabel: false,
     chords: false,
     accidentals: true,
-    // Full treble range including accidentals
     notePool: ["C4","C#4","D4","D#4","E4","F4","F#4","G4","G#4","A4","Bb4","B4",
                "C5","C#5","D5","D#5","E5","F5","F#5","G5","G#5","A5"],
     description: "Sostenidos y bemoles · Clave de Sol · Sin nombres",
@@ -103,7 +152,6 @@ const LEVELS = [
     showLabel: false,
     chords: false,
     accidentals: false,
-    // Full bass range: E2–C4 (natural notes only)
     notePool: ["E2","F2","G2","A2","B2","C3","D3","E3","F3","G3","A3","B3","C4"],
     description: "Notas naturales · Clave de Fa · Sin nombres",
   },
@@ -124,7 +172,6 @@ const LEVELS = [
     showLabel: false,
     chords: true,
     accidentals: true,
-    // Both clefs, full range, all accidentals
     notePool: ["E2","F2","F#2","G2","G#2","A2","Bb2","B2",
                "C3","C#3","D3","D#3","E3","F3","F#3","G3","G#3","A3","Bb3","B3",
                "C4","C#4","D4","D#4","E4","F4","F#4","G4","G#4","A4","Bb4","B4",
@@ -133,67 +180,6 @@ const LEVELS = [
   },
   LEVEL7,
 ];
-
-// ─────────────────────────────────────────────────────────────────────────────
-// KEY SIGNATURES
-// Each entry: { name, sharps[], flats[], notePool (all treble natural names) }
-// notePool lists the "written" note names (without accidentals).
-// The key signature tells the player which ones sound altered.
-// ─────────────────────────────────────────────────────────────────────────────
-
-// Sharp/flat positions on treble staff (line value for symbol placement)
-const SHARP_POSITIONS  = [5, 4.5, 5.5, 5, 4.5, 5, 5.5 ]; // F C G D A E B
-const FLAT_POSITIONS   = [7, 7.5, 6.5, 7, 7.5, 6.5, 7  ]; // B E A D G C F
-const SHARP_NOTE_NAMES = ["F","C","G","D","A","E","B"];
-const FLAT_NOTE_NAMES  = ["B","E","A","D","G","C","F"];
-
-// For each key signature, which pitch classes are altered (used to compute correct answer)
-// sharps: those note letters become # | flats: those letters become b
-const KEY_SIGNATURES = [
-  { name:"Do Mayor",    sharps:[], flats:[], display:"0 alteraciones" },
-  { name:"Sol Mayor",   sharps:["F"], flats:[], display:"1♯ (Fa#)" },
-  { name:"Fa Mayor",    sharps:[], flats:["B"], display:"1♭ (Sib)" },
-  { name:"Re Mayor",    sharps:["F","C"], flats:[], display:"2♯ (Fa# Do#)" },
-  { name:"Sib Mayor",   sharps:[], flats:["B","E"], display:"2♭ (Sib Mib)" },
-  { name:"La Mayor",    sharps:["F","C","G"], flats:[], display:"3♯ (Fa# Do# Sol#)" },
-  { name:"Mib Mayor",   sharps:[], flats:["B","E","A"], display:"3♭ (Sib Mib Lab)" },
-  { name:"Mi Mayor",    sharps:["F","C","G","D"], flats:[], display:"4♯" },
-  { name:"Lab Mayor",   sharps:[], flats:["B","E","A","D"], display:"4♭" },
-  { name:"Si Mayor",    sharps:["F","C","G","D","A"], flats:[], display:"5♯" },
-  { name:"Reb Mayor",   sharps:[], flats:["B","E","A","D","G"], display:"5♭" },
-  { name:"Fa# Mayor",   sharps:["F","C","G","D","A","E"], flats:[], display:"6♯" },
-  { name:"Solb Mayor",  sharps:[], flats:["B","E","A","D","G","C"], display:"6♭" },
-  { name:"Do# Mayor",   sharps:["F","C","G","D","A","E","B"], flats:[], display:"7♯" },
-  { name:"Dob Mayor",   sharps:[], flats:["B","E","A","D","G","C","F"], display:"7♭" },
-];
-
-// All natural note names on treble staff (written names, no accidentals)
-const TREBLE_NATURAL_POOL = ["C4","D4","E4","F4","G4","A4","B4","C5","D5","E5","F5","G5","A5"];
-const BASS_NATURAL_POOL   = ["E2","F2","G2","A2","B2","C3","D3","E3","F3","G3","A3","B3","C4"];
-
-// Given a written note like "F4" and a key signature, return the actual sounding note ("F#4")
-function applyKeySignature(writtenNote, keySig) {
-  const m = writtenNote.match(/^([A-G])(\d)$/);
-  if (!m) return writtenNote;
-  const letter = m[1], oct = m[2];
-  if (keySig.sharps.includes(letter)) return `${letter}#${oct}`;
-  if (keySig.flats.includes(letter))  return `${letter}b${oct}`;
-  return writtenNote;
-}
-
-// Level 7: one sub-level per key signature (replaces the normal SUB_TIMES progression)
-// Within each key signature sub-level, the normal time progression still applies
-const LEVEL7 = {
-  id: 7,
-  name: "Armaduras",
-  clef: "treble",
-  showLabel: false,
-  chords: false,
-  accidentals: false, // accidentals shown in key sig, NOT on individual notes
-  keySigMode: true,   // flag to activate key signature logic
-  notePool: TREBLE_NATURAL_POOL, // written (visual) notes
-  description: "Armaduras de clave · 15 escalas mayores · Sin nombres",
-};
 
 // Piano keys C2–C6
 const PIANO_KEYS = [];
