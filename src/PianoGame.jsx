@@ -276,16 +276,16 @@ function KeySigSymbols({ clef, keySig, y, startX }) {
   const isSharp = keySig.sharps.length > 0;
   const symbols = isSharp ? keySig.sharps : keySig.flats;
   const positions = isSharp ? SHARP_POSITIONS : FLAT_POSITIONS;
-  const x0 = startX || 52;
+  const x0 = startX || 54;
 
   return (
     <>
       {symbols.map((_, i) => (
         <text
           key={i}
-          x={x0 + i * 11}
-          y={y(positions[i]) + 4}
-          fontSize={13}
+          x={x0 + i * 14}
+          y={y(positions[i]) + 6}
+          fontSize={18}
           fontFamily="serif"
           fill="#d4b870"
           style={{userSelect:"none"}}
@@ -296,15 +296,15 @@ function KeySigSymbols({ clef, keySig, y, startX }) {
 }
 
 function Staff({ clef, notes, showLabel, keySig }) {
-  const W=300, H=130, sp=10, top=30;
+  const W=300, H=220, sp=22, top=70;
   const y = line => top + (line-4)*(sp/2);
   const staffLines = [4,5,6,7,8];
   const staffData = clef==="treble" ? TREBLE_STAFF : BASS_STAFF;
 
   // How much space does the key sig take?
   const keySigCount = keySig ? Math.max(keySig.sharps.length, keySig.flats.length) : 0;
-  const keySigWidth = keySigCount > 0 ? 52 + keySigCount * 11 + 8 : 0;
-  const noteX = keySigCount > 0 ? (52 + keySigCount * 11 + 20) : W/2;
+  const keySigWidth = keySigCount > 0 ? 54 + keySigCount * 14 + 8 : 0;
+  const noteX = keySigCount > 0 ? (54 + keySigCount * 14 + 20) : W/2;
 
   const noteInfos = notes.map(n => {
     // For key sig mode: written note has no accidental, find by natural name
@@ -326,16 +326,16 @@ function Staff({ clef, notes, showLabel, keySig }) {
 
   return (
     <svg viewBox={`0 0 ${W} ${H}`} width="100%" style={{maxWidth:300}}>
-      {/* Clef */}
+      {/* Clef — treble baseline places curl on G4 (line 5); bass baseline places dots on F3 (line 5) */}
       <text
-        x={clef==="treble"?16:18}
-        y={clef==="treble"?y(8)+28:y(6)+8}
-        fontSize={clef==="treble"?68:42}
+        x={clef==="treble"?10:14}
+        y={clef==="treble"?y(5)+43:y(5)+18}
+        fontSize={clef==="treble"?68:50}
         fontFamily="serif" fill="#d4c4a0" style={{userSelect:"none"}}
       >{clef==="treble"?"𝄞":"𝄢"}</text>
 
       {/* Key signature symbols */}
-      <KeySigSymbols clef={clef} keySig={keySig} y={y} startX={52} />
+      <KeySigSymbols clef={clef} keySig={keySig} y={y} startX={54} />
 
       {/* Staff lines */}
       {staffLines.map(l=>(
@@ -356,17 +356,17 @@ function Staff({ clef, notes, showLabel, keySig }) {
         const showAcc = keySig ? false : !!info.acc;
         return (
           <g key={`${info.note}-${i}`}>
-            <ellipse cx={nx} cy={ny} rx={16} ry={12} fill="#f5c84228"/>
-            <ellipse cx={nx} cy={ny} rx={9} ry={6.5} fill="#f5c842" stroke="#c89000" strokeWidth={1.5}/>
-            <line x1={nx+9} y1={ny} x2={nx+9} y2={ny-30} stroke="#f5c842" strokeWidth={1.8}/>
+            <ellipse cx={nx} cy={ny} rx={18} ry={13} fill="#f5c84228"/>
+            <ellipse cx={nx} cy={ny} rx={10} ry={7} fill="#f5c842" stroke="#c89000" strokeWidth={1.5}/>
+            <line x1={nx+10} y1={ny} x2={nx+10} y2={ny-40} stroke="#f5c842" strokeWidth={1.8}/>
             {showAcc && (
-              <text x={nx-17} y={ny+4} fontSize={14} fontFamily="serif" fill="#f5a020"
+              <text x={nx-20} y={ny+5} fontSize={16} fontFamily="serif" fill="#f5a020"
                 style={{userSelect:"none"}}>
                 {info.acc==="#"?"♯":"♭"}
               </text>
             )}
             {showLabel && (
-              <text x={nx} y={ny+22} textAnchor="middle" fontSize={10}
+              <text x={nx} y={ny+26} textAnchor="middle" fontSize={11}
                 fontFamily="Georgia,serif" fill="#f5c842" fontWeight="bold">
                 {noteLabel(info.note)}
               </text>
@@ -528,7 +528,8 @@ function StatsScreen({ stats, onBack }) {
       background:"radial-gradient(ellipse at 30% 20%,#1e1208 0%,#0c0804 70%)",
       fontFamily:"Georgia,serif", color:"#e8dcc8",
       display:"flex",flexDirection:"column",alignItems:"center",
-      padding:"18px 14px 32px",
+      paddingTop:"max(60px, env(safe-area-inset-top, 20px))",
+      paddingLeft:"14px", paddingRight:"14px", paddingBottom:"32px",
     }}>
       <div style={{width:"100%",maxWidth:400}}>
         <button onClick={onBack} style={{
