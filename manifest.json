@@ -1,0 +1,25 @@
+{
+  "name": "Partitura · Lectura de Notas",
+  "short_name": "Partitura",
+  "description": "Juego de lectura de notas musicales para piano",
+  "start_url": "/piano-game/",
+  "scope": "/piano-game/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#0e0804",
+  "theme_color": "#0e0804",
+  "icons": [
+    {
+      "src": "/piano-game/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/piano-game/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
