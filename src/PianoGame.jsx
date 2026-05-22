@@ -12,61 +12,63 @@ const SOLFEGE    = { C:"Do", "C#":"Do#", D:"Re", "D#":"Re#", E:"Mi",
 // Sub-level time limits in seconds (0 = free)
 const SUB_TIMES = [0, 20, 15, 10, 8, 7, 6, 5, 4, 3];
 
-// Notes on treble staff: { note, line, accidental? }
-// line: 4=first staff line, each 0.5 = one step up
+// Notes on treble staff. line: 1=top staff line (F5), 5=bottom (E4), spaces at x.5
+// Below staff: 5.5, 6… / Above staff: 0.5, 0, -0.5…
 const TREBLE_STAFF = [
-  { note:"C4",  line:10,   ledger:true },
-  { note:"D4",  line:9.5 },
-  { note:"E4",  line:9   },
-  { note:"F4",  line:8.5 },
-  { note:"F#4", line:8.5, acc:"#" },
-  { note:"G4",  line:8   },
-  { note:"G#4", line:8,   acc:"#" },
-  { note:"A4",  line:7.5 },
-  { note:"Bb4", line:7,   acc:"b" },  // Bb shown on B line with flat
-  { note:"B4",  line:7   },
-  { note:"C5",  line:6.5 },
-  { note:"C#5", line:6.5, acc:"#" },
-  { note:"D5",  line:6   },
-  { note:"D#5", line:6,   acc:"#" },
-  { note:"E5",  line:5.5 },
-  { note:"F5",  line:5   },
-  { note:"F#5", line:5,   acc:"#" },
-  { note:"G5",  line:4.5 },
-  { note:"G#5", line:4.5, acc:"#" },
-  { note:"A5",  line:4   },
+  { note:"C4",  line:6,   ledger:true },
+  { note:"D4",  line:5.5 },
+  { note:"E4",  line:5   },
+  { note:"F4",  line:4.5 },
+  { note:"F#4", line:4.5, acc:"#" },
+  { note:"G4",  line:4   },
+  { note:"G#4", line:4,   acc:"#" },
+  { note:"A4",  line:3.5 },
+  { note:"Bb4", line:3,   acc:"b" },
+  { note:"B4",  line:3   },
+  { note:"C5",  line:2.5 },
+  { note:"C#5", line:2.5, acc:"#" },
+  { note:"D5",  line:2   },
+  { note:"D#5", line:2,   acc:"#" },
+  { note:"E5",  line:1.5 },
+  { note:"F5",  line:1   },
+  { note:"F#5", line:1,   acc:"#" },
+  { note:"G5",  line:0.5 },
+  { note:"G#5", line:0.5, acc:"#" },
+  { note:"A5",  line:0,   ledger:true },
 ];
 
+// Bass staff: line 1=top (F3), line 5=bottom (E2). Above staff: 0, -0.5, -1…
 const BASS_STAFF = [
-  { note:"E2",  line:10 },
-  { note:"F2",  line:9.5 },
-  { note:"F#2", line:9.5, acc:"#" },
-  { note:"G2",  line:9   },
-  { note:"G#2", line:9,   acc:"#" },
-  { note:"A2",  line:8.5 },
-  { note:"Bb2", line:8,   acc:"b" },
-  { note:"B2",  line:8   },
-  { note:"C3",  line:7.5 },
-  { note:"C#3", line:7.5, acc:"#" },
-  { note:"D3",  line:7   },
-  { note:"D#3", line:7,   acc:"#" },
-  { note:"E3",  line:6.5 },
-  { note:"F3",  line:6   },
-  { note:"F#3", line:6,   acc:"#" },
-  { note:"G3",  line:5.5 },
-  { note:"G#3", line:5.5, acc:"#" },
-  { note:"A3",  line:5   },
-  { note:"Bb3", line:4.5, acc:"b" },
-  { note:"B3",  line:4.5 },
-  { note:"C4",  line:4,   ledger:true },
+  { note:"E2",  line:5   },
+  { note:"F2",  line:4.5 },
+  { note:"F#2", line:4.5, acc:"#" },
+  { note:"G2",  line:4   },
+  { note:"G#2", line:4,   acc:"#" },
+  { note:"A2",  line:3.5 },
+  { note:"Bb2", line:3,   acc:"b" },
+  { note:"B2",  line:3   },
+  { note:"C3",  line:2.5 },
+  { note:"C#3", line:2.5, acc:"#" },
+  { note:"D3",  line:2   },
+  { note:"D#3", line:2,   acc:"#" },
+  { note:"E3",  line:1.5 },
+  { note:"F3",  line:1   },
+  { note:"F#3", line:1,   acc:"#" },
+  { note:"G3",  line:0.5 },
+  { note:"G#3", line:0.5, acc:"#" },
+  { note:"A3",  line:0,   ledger:true },
+  { note:"Bb3", line:-0.5, acc:"b" },
+  { note:"B3",  line:-0.5 },
+  { note:"C4",  line:-1,  ledger:true },
 ];
 
 // ─────────────────────────────────────────────────────────────────────────────
 // KEY SIGNATURES
 // ─────────────────────────────────────────────────────────────────────────────
 
-const SHARP_POSITIONS  = [5, 4.5, 5.5, 5, 4.5, 5, 5.5 ]; // F C G D A E B
-const FLAT_POSITIONS   = [7, 7.5, 6.5, 7, 7.5, 6.5, 7  ]; // B E A D G C F
+// Key sig positions in new coordinate system (1=top line, 5=bottom line)
+const SHARP_POSITIONS  = [2, 1.5, 2.5, 2, 1.5, 2, 2.5]; // F C G D A E B
+const FLAT_POSITIONS   = [4, 4.5, 3.5, 4, 4.5, 3.5, 4]; // B E A D G C F
 const SHARP_NOTE_NAMES = ["F","C","G","D","A","E","B"];
 const FLAT_NOTE_NAMES  = ["B","E","A","D","G","C","F"];
 
@@ -276,16 +278,16 @@ function KeySigSymbols({ clef, keySig, y, startX }) {
   const isSharp = keySig.sharps.length > 0;
   const symbols = isSharp ? keySig.sharps : keySig.flats;
   const positions = isSharp ? SHARP_POSITIONS : FLAT_POSITIONS;
-  const x0 = startX || 54;
+  const x0 = startX || 110;
 
   return (
     <>
       {symbols.map((_, i) => (
         <text
           key={i}
-          x={x0 + i * 14}
-          y={y(positions[i]) + 6}
-          fontSize={18}
+          x={x0 + i * 18}
+          y={y(positions[i]) + 7}
+          fontSize={20}
           fontFamily="serif"
           fill="#d4b870"
           style={{userSelect:"none"}}
@@ -296,28 +298,25 @@ function KeySigSymbols({ clef, keySig, y, startX }) {
 }
 
 function Staff({ clef, notes, showLabel, keySig }) {
-  const W=300, H=220, sp=22, top=70;
-  const y = line => top + (line-4)*(sp/2);
-  const staffLines = [4,5,6,7,8];
+  // W wide so aspect ratio keeps height ~200px at typical container widths
+  const W=900, H=200, sp=18;
+  // topLineY: y-coordinate of line 1 (top staff line)
+  const topLineY = 64;
+  const y = line => topLineY + (line - 1) * sp;
+  const staffLines = [1, 2, 3, 4, 5];
   const staffData = clef==="treble" ? TREBLE_STAFF : BASS_STAFF;
 
-  // How much space does the key sig take?
-  const keySigCount = keySig ? Math.max(keySig.sharps.length, keySig.flats.length) : 0;
-  const keySigWidth = keySigCount > 0 ? 54 + keySigCount * 14 + 8 : 0;
-  const noteX = keySigCount > 0 ? (54 + keySigCount * 14 + 20) : W/2;
+  // Note always centered horizontally; key sig fills left area without shifting note
+  const noteX = W / 2;
 
   const noteInfos = notes.map(n => {
-    // For key sig mode: written note has no accidental, find by natural name
-    const naturalN = n.replace(/#|b/g,"").replace(/(\d)/,"$1"); // strip acc if any
+    const naturalN = n.replace(/#|b/g,"").replace(/(\d)/,"$1");
     let info = staffData.find(d => d.note === n);
     if (!info) {
       const enh = enharmonicNote(n);
       if (enh) info = staffData.find(d => d.note === enh);
     }
-    // Also try matching by natural note (written note without accidentals)
-    if (!info) {
-      info = staffData.find(d => d.note === naturalN);
-    }
+    if (!info) info = staffData.find(d => d.note === naturalN);
     return info ? {...info, displayNote: n} : null;
   }).filter(Boolean);
 
@@ -325,48 +324,48 @@ function Staff({ clef, notes, showLabel, keySig }) {
   noteInfos.forEach(info => { if(info.ledger) ledgerLines.add(info.line); });
 
   return (
-    <svg viewBox={`0 0 ${W} ${H}`} width="100%" style={{maxWidth:300}}>
-      {/* Clef — treble baseline places curl on G4 (line 5); bass baseline places dots on F3 (line 5) */}
+    <svg viewBox={`0 0 ${W} ${H}`} width="100%">
+      {/* Treble clef: baseline at y(5)+20 places curl on G4 line (line 4).
+          Bass clef: baseline at y(3)+8 places dots near space between lines 1-2. */}
       <text
-        x={clef==="treble"?10:14}
-        y={clef==="treble"?y(5)+43:y(5)+18}
-        fontSize={clef==="treble"?68:50}
+        x={clef==="treble" ? 6 : 8}
+        y={clef==="treble" ? y(5)+20 : y(3)+8}
+        fontSize={clef==="treble" ? 120 : 80}
         fontFamily="serif" fill="#d4c4a0" style={{userSelect:"none"}}
-      >{clef==="treble"?"𝄞":"𝄢"}</text>
+      >{clef==="treble" ? "𝄞" : "𝄢"}</text>
 
       {/* Key signature symbols */}
-      <KeySigSymbols clef={clef} keySig={keySig} y={y} startX={54} />
+      <KeySigSymbols clef={clef} keySig={keySig} y={y} startX={110} />
 
       {/* Staff lines */}
       {staffLines.map(l=>(
-        <line key={l} x1={14} x2={W-14} y1={y(l)} y2={y(l)} stroke="#b09870" strokeWidth={1.2}/>
+        <line key={l} x1={40} x2={W-40} y1={y(l)} y2={y(l)} stroke="#b09870" strokeWidth={1.5}/>
       ))}
 
       {/* Ledger lines */}
       {[...ledgerLines].map(l=>(
-        <line key={`led${l}`} x1={noteX-22} x2={noteX+22} y1={y(l)} y2={y(l)} stroke="#b09870" strokeWidth={1.5}/>
+        <line key={`led${l}`} x1={noteX-28} x2={noteX+28} y1={y(l)} y2={y(l)} stroke="#b09870" strokeWidth={1.8}/>
       ))}
 
       {/* Notes */}
       {noteInfos.map((info, i) => {
-        const xOff = noteInfos.length > 1 ? (i===0 ? -14 : 14) : 0;
+        const xOff = noteInfos.length > 1 ? (i===0 ? -20 : 20) : 0;
         const nx = noteX + xOff;
         const ny = y(info.line);
-        // In keySig mode: never show accidental on note itself
         const showAcc = keySig ? false : !!info.acc;
         return (
           <g key={`${info.note}-${i}`}>
-            <ellipse cx={nx} cy={ny} rx={18} ry={13} fill="#f5c84228"/>
-            <ellipse cx={nx} cy={ny} rx={10} ry={7} fill="#f5c842" stroke="#c89000" strokeWidth={1.5}/>
-            <line x1={nx+10} y1={ny} x2={nx+10} y2={ny-40} stroke="#f5c842" strokeWidth={1.8}/>
+            <ellipse cx={nx} cy={ny} rx={24} ry={16} fill="#f5c84228"/>
+            <ellipse cx={nx} cy={ny} rx={13} ry={9} fill="#f5c842" stroke="#c89000" strokeWidth={2}/>
+            <line x1={nx+13} y1={ny} x2={nx+13} y2={ny-52} stroke="#f5c842" strokeWidth={2.2}/>
             {showAcc && (
-              <text x={nx-20} y={ny+5} fontSize={16} fontFamily="serif" fill="#f5a020"
+              <text x={nx-26} y={ny+6} fontSize={20} fontFamily="serif" fill="#f5a020"
                 style={{userSelect:"none"}}>
-                {info.acc==="#"?"♯":"♭"}
+                {info.acc==="#" ? "♯" : "♭"}
               </text>
             )}
             {showLabel && (
-              <text x={nx} y={ny+26} textAnchor="middle" fontSize={11}
+              <text x={nx} y={ny+32} textAnchor="middle" fontSize={13}
                 fontFamily="Georgia,serif" fill="#f5c842" fontWeight="bold">
                 {noteLabel(info.note)}
               </text>
@@ -375,8 +374,8 @@ function Staff({ clef, notes, showLabel, keySig }) {
         );
       })}
 
-      <text x={W-10} y={H-6} textAnchor="end" fontSize={9} fill="#6a5030" fontFamily="Georgia,serif">
-        {clef==="treble"?"Clave de Sol":"Clave de Fa"}
+      <text x={W-16} y={H-8} textAnchor="end" fontSize={11} fill="#6a5030" fontFamily="Georgia,serif">
+        {clef==="treble" ? "Clave de Sol" : "Clave de Fa"}
       </text>
     </svg>
   );
@@ -1066,7 +1065,7 @@ export default function PianoGame() {
 
         {currentNotes.length>0 && (
           <div style={{
-            width:"100%",maxWidth:staffMaxW,
+            width:"100%",maxWidth:pianoMaxW,
             background:"#120a02",border:"1.5px solid #2e1c08",
             borderRadius:12,padding:isLandscape&&!isTablet?"2px 8px":"5px 10px",
             marginBottom:gap,boxShadow:"0 4px 24px rgba(0,0,0,0.7)",
