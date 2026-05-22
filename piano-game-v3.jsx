@@ -352,7 +352,7 @@ function Staff({ clef, notes, showLabel, keySig }) {
       {clef==="treble" ? (
         <text x={10} y={-4} fontSize={68} fontFamily="serif" fill="#d4c4a0" style={{userSelect:"none"}}>𝄞</text>
       ) : (
-        <text x={10} y={y(5)+sp*0.6} fontSize={sp*4} fontFamily="serif" fill="#d4c4a0" style={{userSelect:"none"}}>𝄢</text>
+        <text x={14} y={y(4)+sp*3.2} fontSize={sp*5} fontFamily="serif" fill="#d4c4a0" style={{userSelect:"none"}}>𝄢</text>
       )}
 
       {/* Ledger lines */}

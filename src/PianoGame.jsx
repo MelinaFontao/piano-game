@@ -411,7 +411,7 @@ function Staff({ clef, notes, showLabel, keySig }) {
       {clef==="treble" ? (
         <text x={10} y={179} fontSize={176} fontFamily="serif" fill="#d4c4a0" style={{userSelect:"none"}}>𝄞</text>
       ) : (
-        <text x={10} y={y(2)+sp*0.6} fontSize={sp*4} fontFamily="serif" fill="#d4c4a0" style={{userSelect:"none"}}>𝄢</text>
+        <text x={14} y={y(1)+sp*3.2} fontSize={sp*5} fontFamily="serif" fill="#d4c4a0" style={{userSelect:"none"}}>𝄢</text>
       )}
 
       <text x={W-16} y={H-8} textAnchor="end" fontSize={11} fill="#6a5030" fontFamily="Georgia,serif">
