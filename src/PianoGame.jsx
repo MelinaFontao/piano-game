@@ -931,6 +931,8 @@ export default function PianoGame() {
     setScreen("play");
     setSessionScore(0);
     setStreak(0);
+    setSubLevel(0);
+    subLevelRef.current = 0;
     setRecentNotes([]);
     loadNext([]);
   }
