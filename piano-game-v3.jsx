@@ -340,14 +340,6 @@ function Staff({ clef, notes, showLabel, keySig }) {
 
   return (
     <svg viewBox={`0 0 ${W} ${H}`} width="100%" style={{maxWidth:300}}>
-      {/* Clef */}
-      <text
-        x={clef==="treble"?16:18}
-        y={clef==="treble"?y(8)+28:y(6)+8}
-        fontSize={clef==="treble"?68:42}
-        fontFamily="serif" fill="#d4c4a0" style={{userSelect:"none"}}
-      >{clef==="treble"?"𝄞":"𝄢"}</text>
-
       {/* Key signature symbols */}
       <KeySigSymbols clef={clef} keySig={keySig} y={y} startX={52} />
 
@@ -355,6 +347,13 @@ function Staff({ clef, notes, showLabel, keySig }) {
       {staffLines.map(l=>(
         <line key={l} x1={14} x2={W-14} y1={y(l)} y2={y(l)} stroke="#b09870" strokeWidth={1.2}/>
       ))}
+
+      {/* Clef drawn after staff lines so it renders on top */}
+      {clef==="treble" ? (
+        <text x={10} y={228} fontSize={265} fontFamily="serif" fill="#d4c4a0" style={{userSelect:"none"}}>𝄞</text>
+      ) : (
+        <text x={18} y={y(6)+8} fontSize={42} fontFamily="serif" fill="#d4c4a0" style={{userSelect:"none"}}>𝄢</text>
+      )}
 
       {/* Ledger lines */}
       {[...ledgerLines].map(l=>(
@@ -914,6 +913,8 @@ export default function PianoGame() {
     setScreen("play");
     setSessionScore(0);
     setStreak(0);
+    setSubLevel(0);
+    subLevelRef.current = 0;
     setRecentNotes([]);
     loadNext([]);
   }
