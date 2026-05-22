@@ -350,7 +350,7 @@ function Staff({ clef, notes, showLabel, keySig }) {
 
       {/* Clef drawn after staff lines so it renders on top */}
       {clef==="treble" ? (
-        <text x={10} y={86} fontSize={90} fontFamily="serif" fill="#d4c4a0" style={{userSelect:"none"}}>𝄞</text>
+        <text x={10} y={26} fontSize={90} fontFamily="serif" fill="#d4c4a0" style={{userSelect:"none"}}>𝄞</text>
       ) : (
         <text x={18} y={y(6)+8} fontSize={42} fontFamily="serif" fill="#d4c4a0" style={{userSelect:"none"}}>𝄢</text>
       )}
