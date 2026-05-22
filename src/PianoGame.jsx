@@ -1033,19 +1033,17 @@ export default function PianoGame() {
             gap:6,marginBottom:12,
           }}>
             {LEVELS.map((lv,i)=>{
-              // TODO: restore lock logic for production
-              const isActive=i===levelIdx, isDone=i<levelIdx;
+              const isActive=i===levelIdx, isLocked=i>levelIdx && i>=6, isDone=i<levelIdx;
               return (
-                <div key={lv.id} onClick={()=>{ setLevelIdx(i); setSubLevel(0); setCanLevelUp(false); }} style={{
+                <div key={lv.id} style={{
                   background:isActive?"#1e1408":"#120a04",
                   border:`1.5px solid ${isActive?"#f5c842":isDone?"#3a6030":"#2a1808"}`,
-                  borderRadius:10,padding:"7px 11px",
+                  borderRadius:10,padding:"7px 11px",opacity:isLocked?0.4:1,
                   display:"flex",justifyContent:"space-between",alignItems:"center",
-                  cursor:"pointer",
                 }}>
                   <div>
                     <div style={{fontSize:isTablet?13:11,color:isActive?"#f5c842":isDone?"#60a050":"#7a6040"}}>
-                      {isDone?"✓ ":isActive?"▶ ":"○ "}{lv.id}. {lv.name}
+                      {isDone?"✓ ":isActive?"▶ ":"🔒 "}{lv.id}. {lv.name}
                     </div>
                     <div style={{fontSize:9,color:"#4a3020",marginTop:1}}>{lv.description}</div>
                   </div>
