@@ -937,6 +937,14 @@ export default function PianoGame() {
     loadNext([]);
   }
 
+  function continuePlaying() {
+    setScreen("play");
+    setSessionScore(0);
+    setStreak(0);
+    setRecentNotes([]);
+    loadNext([]);
+  }
+
   // ── Viewport / orientation detection
   const [vp, setVp] = useState({ w: window.innerWidth, h: window.innerHeight });
   useEffect(() => {
@@ -1064,6 +1072,18 @@ export default function PianoGame() {
               color:"#7a6040",fontSize:isTablet?14:12,cursor:"pointer",fontFamily:"Georgia,serif",
             }}>📊 Stats</button>
           </div>
+
+          {subLevel > 0 && (
+            <div style={{textAlign:"center",marginBottom:10}}>
+              <button onClick={continuePlaying} style={{
+                padding:isTablet?"9px 22px":"7px 18px",borderRadius:28,
+                border:"1.5px solid #6a9060",background:"#0e1a0c",
+                color:"#80c070",fontSize:isTablet?13:11,cursor:"pointer",fontFamily:"Georgia,serif",
+              }}>
+                ↩ Continuar sesión anterior · sub {subLevel+1} · {SUB_TIMES[subLevel]}s
+              </button>
+            </div>
+          )}
 
           <div style={{textAlign:"center"}}>
             {canLevelUp && levelIdx<LEVELS.length-1 ? (
