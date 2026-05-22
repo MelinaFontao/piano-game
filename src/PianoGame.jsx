@@ -1033,18 +1033,19 @@ export default function PianoGame() {
             gap:6,marginBottom:12,
           }}>
             {LEVELS.map((lv,i)=>{
-              // TODO: remove for production
-              const isActive=i===levelIdx, isLocked=i>levelIdx && i>=6, isDone=i<levelIdx;
+              // TODO: restore lock logic for production
+              const isActive=i===levelIdx, isDone=i<levelIdx;
               return (
-                <div key={lv.id} style={{
+                <div key={lv.id} onClick={()=>{ setLevelIdx(i); setSubLevel(0); setCanLevelUp(false); }} style={{
                   background:isActive?"#1e1408":"#120a04",
                   border:`1.5px solid ${isActive?"#f5c842":isDone?"#3a6030":"#2a1808"}`,
-                  borderRadius:10,padding:"7px 11px",opacity:isLocked?0.4:1,
+                  borderRadius:10,padding:"7px 11px",
                   display:"flex",justifyContent:"space-between",alignItems:"center",
+                  cursor:"pointer",
                 }}>
                   <div>
                     <div style={{fontSize:isTablet?13:11,color:isActive?"#f5c842":isDone?"#60a050":"#7a6040"}}>
-                      {isDone?"✓ ":isActive?"▶ ":"🔒 "}{lv.id}. {lv.name}
+                      {isDone?"✓ ":isActive?"▶ ":"○ "}{lv.id}. {lv.name}
                     </div>
                     <div style={{fontSize:9,color:"#4a3020",marginTop:1}}>{lv.description}</div>
                   </div>
@@ -1112,7 +1113,7 @@ export default function PianoGame() {
 
       {/* Play screen */}
       {screen==="play" && (<>
-        <button onClick={()=>{ clearTimeout(timerRef.current); clearTimeout(advanceRef.current); setScreen("menu"); }}
+        <button onClick={()=>{ clearTimeout(timerRef.current); clearTimeout(advanceRef.current); saveProgress(levelIdxRef.current, subLevelRef.current, statsRef.current, canLevelUpRef.current, keySigIdxRef.current); setScreen("menu"); }}
           style={{padding:"4px 12px",borderRadius:14,border:"1px solid #2a1808",
             background:"transparent",color:"#5a4020",fontSize:10,
             cursor:"pointer",marginBottom:gap,fontFamily:"Georgia,serif",
