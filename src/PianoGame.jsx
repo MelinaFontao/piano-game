@@ -12,54 +12,88 @@ const SOLFEGE    = { C:"Do", "C#":"Do#", D:"Re", "D#":"Re#", E:"Mi",
 // Sub-level time limits in seconds (0 = free)
 const SUB_TIMES = [0, 20, 15, 10, 8, 7, 6, 5, 4, 3];
 
-// Notes on treble staff. line: 1=top staff line (F5), 5=bottom (E4), spaces at x.5
-// Below staff: 5.5, 6… / Above staff: 0.5, 0, -0.5…
+// Treble staff: line 5=bottom (E4), line 1=top (F5). Spaces at x.5.
+// Below staff: line > 5 (ledger). Above staff: line < 1 (ledger).
 const TREBLE_STAFF = [
   { note:"C4",  line:6,   ledger:true },
+  { note:"C#4", line:6,   acc:"#", ledger:true },
+  { note:"Cb4", line:6,   acc:"b", ledger:true },
   { note:"D4",  line:5.5 },
+  { note:"D#4", line:5.5, acc:"#" },
+  { note:"Db4", line:5.5, acc:"b" },
   { note:"E4",  line:5   },
+  { note:"E#4", line:5,   acc:"#" },
+  { note:"Eb4", line:5,   acc:"b" },
   { note:"F4",  line:4.5 },
   { note:"F#4", line:4.5, acc:"#" },
+  { note:"Fb4", line:4.5, acc:"b" },
   { note:"G4",  line:4   },
   { note:"G#4", line:4,   acc:"#" },
+  { note:"Gb4", line:4,   acc:"b" },
   { note:"A4",  line:3.5 },
-  { note:"Bb4", line:3,   acc:"b" },
+  { note:"A#4", line:3.5, acc:"#" },
+  { note:"Ab4", line:3.5, acc:"b" },
   { note:"B4",  line:3   },
+  { note:"B#4", line:3,   acc:"#" },
+  { note:"Bb4", line:3,   acc:"b" },
   { note:"C5",  line:2.5 },
   { note:"C#5", line:2.5, acc:"#" },
+  { note:"Cb5", line:2.5, acc:"b" },
   { note:"D5",  line:2   },
   { note:"D#5", line:2,   acc:"#" },
+  { note:"Db5", line:2,   acc:"b" },
   { note:"E5",  line:1.5 },
+  { note:"E#5", line:1.5, acc:"#" },
+  { note:"Eb5", line:1.5, acc:"b" },
   { note:"F5",  line:1   },
   { note:"F#5", line:1,   acc:"#" },
+  { note:"Fb5", line:1,   acc:"b" },
   { note:"G5",  line:0.5 },
   { note:"G#5", line:0.5, acc:"#" },
+  { note:"Gb5", line:0.5, acc:"b" },
   { note:"A5",  line:0,   ledger:true },
+  { note:"A#5", line:0,   acc:"#", ledger:true },
+  { note:"Ab5", line:0,   acc:"b", ledger:true },
 ];
 
-// Bass staff: line 1=top (F3), line 5=bottom (E2). Above staff: 0, -0.5, -1…
+// Bass staff: line 5=bottom (G2), line 1=top (A3). Same coordinate system as treble.
+// Below staff: line > 5 (ledger). Above staff: line < 1 (ledger).
 const BASS_STAFF = [
-  { note:"E2",  line:5   },
-  { note:"F2",  line:4.5 },
-  { note:"F#2", line:4.5, acc:"#" },
-  { note:"G2",  line:4   },
-  { note:"G#2", line:4,   acc:"#" },
-  { note:"A2",  line:3.5 },
-  { note:"Bb2", line:3,   acc:"b" },
-  { note:"B2",  line:3   },
-  { note:"C3",  line:2.5 },
-  { note:"C#3", line:2.5, acc:"#" },
-  { note:"D3",  line:2   },
-  { note:"D#3", line:2,   acc:"#" },
-  { note:"E3",  line:1.5 },
-  { note:"F3",  line:1   },
-  { note:"F#3", line:1,   acc:"#" },
-  { note:"G3",  line:0.5 },
-  { note:"G#3", line:0.5, acc:"#" },
-  { note:"A3",  line:0,   ledger:true },
-  { note:"Bb3", line:-0.5, acc:"b" },
-  { note:"B3",  line:-0.5 },
+  { note:"C2",  line:7.5, ledger:true },
+  { note:"D2",  line:7,   ledger:true },
+  { note:"E2",  line:6.5, ledger:true },
+  { note:"F2",  line:6,   ledger:true },
+  { note:"G2",  line:5   },
+  { note:"G#2", line:5,   acc:"#" },
+  { note:"Gb2", line:5,   acc:"b" },
+  { note:"A2",  line:4.5 },
+  { note:"A#2", line:4.5, acc:"#" },
+  { note:"Ab2", line:4.5, acc:"b" },
+  { note:"B2",  line:4   },
+  { note:"B#2", line:4,   acc:"#" },
+  { note:"Bb2", line:4,   acc:"b" },
+  { note:"C3",  line:3.5 },
+  { note:"C#3", line:3.5, acc:"#" },
+  { note:"Cb3", line:3.5, acc:"b" },
+  { note:"D3",  line:3   },
+  { note:"D#3", line:3,   acc:"#" },
+  { note:"Db3", line:3,   acc:"b" },
+  { note:"E3",  line:2.5 },
+  { note:"E#3", line:2.5, acc:"#" },
+  { note:"Eb3", line:2.5, acc:"b" },
+  { note:"F3",  line:2   },
+  { note:"F#3", line:2,   acc:"#" },
+  { note:"Fb3", line:2,   acc:"b" },
+  { note:"G3",  line:1.5 },
+  { note:"G#3", line:1.5, acc:"#" },
+  { note:"Gb3", line:1.5, acc:"b" },
+  { note:"A3",  line:1   },
+  { note:"A#3", line:1,   acc:"#" },
+  { note:"Ab3", line:1,   acc:"b" },
+  { note:"B3",  line:0.5 },
   { note:"C4",  line:-1,  ledger:true },
+  { note:"C#4", line:-1,  acc:"#", ledger:true },
+  { note:"Cb4", line:-1,  acc:"b", ledger:true },
 ];
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -91,7 +125,7 @@ const KEY_SIGNATURES = [
 ];
 
 const TREBLE_NATURAL_POOL = ["C4","D4","E4","F4","G4","A4","B4","C5","D5","E5","F5","G5","A5"];
-const BASS_NATURAL_POOL   = ["E2","F2","G2","A2","B2","C3","D3","E3","F3","G3","A3","B3","C4"];
+const BASS_NATURAL_POOL   = ["G2","A2","B2","C3","D3","E3","F3","G3","A3","B3","C4"];
 
 function applyKeySignature(writtenNote, keySig) {
   const m = writtenNote.match(/^([A-G])(\d)$/);
@@ -102,8 +136,8 @@ function applyKeySignature(writtenNote, keySig) {
   return writtenNote;
 }
 
-const LEVEL7 = {
-  id: 7,
+const LEVEL8 = {
+  id: 8,
   name: "Armaduras",
   clef: "treble",
   showLabel: false,
@@ -128,7 +162,17 @@ const LEVELS = [
   },
   {
     id: 2,
-    name: "Sin ayuda",
+    name: "Mano izquierda",
+    clef: "bass",
+    showLabel: true,
+    chords: false,
+    accidentals: false,
+    notePool: ["G2","A2","B2","C3","D3","E3","F3","G3","A3","B3","C4"],
+    description: "Notas naturales · Clave de Fa · Con nombres",
+  },
+  {
+    id: 3,
+    name: "Sol sin ayuda",
     clef: "treble",
     showLabel: false,
     chords: false,
@@ -137,29 +181,20 @@ const LEVELS = [
     description: "Notas naturales · Clave de Sol · Sin nombres",
   },
   {
-    id: 3,
-    name: "Alteraciones",
-    clef: "treble",
-    showLabel: false,
-    chords: false,
-    accidentals: true,
-    notePool: ["C4","C#4","D4","D#4","E4","F4","F#4","G4","G#4","A4","Bb4","B4",
-               "C5","C#5","D5","D#5","E5","F5","F#5","G5","G#5","A5"],
-    description: "Sostenidos y bemoles · Clave de Sol · Sin nombres",
-  },
-  {
     id: 4,
-    name: "Mano izquierda",
+    name: "Fa sin ayuda",
     clef: "bass",
     showLabel: false,
     chords: false,
-    accidentals: false,
-    notePool: ["E2","F2","G2","A2","B2","C3","D3","E3","F3","G3","A3","B3","C4"],
-    description: "Notas naturales · Clave de Fa · Sin nombres",
+    accidentals: true,
+    notePool: ["G2","G#2","Ab2","A2","A#2","Bb2","B2",
+               "C3","C#3","Db3","D3","D#3","Eb3","E3","F3","F#3","Gb3",
+               "G3","G#3","Ab3","A3","A#3","Bb3","B3","C4"],
+    description: "Sostenidos y bemoles · Clave de Fa · Sin nombres",
   },
   {
     id: 5,
-    name: "Acordes",
+    name: "Acordes Sol",
     clef: "treble",
     showLabel: false,
     chords: true,
@@ -169,18 +204,28 @@ const LEVELS = [
   },
   {
     id: 6,
+    name: "Acordes Fa",
+    clef: "bass",
+    showLabel: false,
+    chords: true,
+    accidentals: false,
+    notePool: ["G2","A2","B2","C3","D3","E3","F3","G3","A3","B3","C4"],
+    description: "Acordes de 2 notas · Clave de Fa · Sin nombres",
+  },
+  {
+    id: 7,
     name: "Maestro",
     clef: "both",
     showLabel: false,
     chords: true,
     accidentals: true,
-    notePool: ["E2","F2","F#2","G2","G#2","A2","Bb2","B2",
-               "C3","C#3","D3","D#3","E3","F3","F#3","G3","G#3","A3","Bb3","B3",
+    notePool: ["G2","G#2","Ab2","A2","Bb2","B2",
+               "C3","C#3","D3","D#3","Eb3","E3","F3","F#3","G3","G#3","A3","Bb3","B3",
                "C4","C#4","D4","D#4","E4","F4","F#4","G4","G#4","A4","Bb4","B4",
                "C5","C#5","D5","D#5","E5","F5","F#5","G5","G#5","A5"],
     description: "Todo junto · Ambas claves · Sin nombres",
   },
-  LEVEL7,
+  LEVEL8,
 ];
 
 // Piano keys C2–C6
@@ -298,15 +343,12 @@ function KeySigSymbols({ clef, keySig, y, startX }) {
 }
 
 function Staff({ clef, notes, showLabel, keySig }) {
-  // W wide so aspect ratio keeps height ~200px at typical container widths
-  const W=900, H=200, sp=18;
-  // topLineY: y-coordinate of line 1 (top staff line)
-  const topLineY = 64;
-  const y = line => topLineY + (line - 1) * sp;
+  const W=680, H=260, sp=26;
+  // line 5 (bottom) → y=174, line 1 (top) → y=70
+  const y = line => 174 + (line - 5) * sp;
   const staffLines = [1, 2, 3, 4, 5];
   const staffData = clef==="treble" ? TREBLE_STAFF : BASS_STAFF;
 
-  // Note always centered horizontally; key sig fills left area without shifting note
   const noteX = W / 2;
 
   const noteInfos = notes.map(n => {
@@ -325,16 +367,7 @@ function Staff({ clef, notes, showLabel, keySig }) {
 
   return (
     <svg viewBox={`0 0 ${W} ${H}`} width="100%">
-      {/* Treble clef: baseline at y(5)+20 places curl on G4 line (line 4).
-          Bass clef: baseline at y(3)+8 places dots near space between lines 1-2. */}
-      <text
-        x={clef==="treble" ? 6 : 8}
-        y={clef==="treble" ? y(5)+20 : y(3)+8}
-        fontSize={clef==="treble" ? 120 : 80}
-        fontFamily="serif" fill="#d4c4a0" style={{userSelect:"none"}}
-      >{clef==="treble" ? "𝄞" : "𝄢"}</text>
-
-      {/* Key signature symbols */}
+      {/* Key signature symbols (behind clef glyph) */}
       <KeySigSymbols clef={clef} keySig={keySig} y={y} startX={110} />
 
       {/* Staff lines */}
@@ -373,6 +406,13 @@ function Staff({ clef, notes, showLabel, keySig }) {
           </g>
         );
       })}
+
+      {/* Clef drawn last so it renders on top of staff lines */}
+      {clef==="treble" ? (
+        <text x={10} y={228} fontSize={265} fontFamily="serif" fill="#d4c4a0" style={{userSelect:"none"}}>𝄞</text>
+      ) : (
+        <text x={18} y={134} fontSize={80} fontFamily="serif" fill="#d4c4a0" style={{userSelect:"none"}}>𝄢</text>
+      )}
 
       <text x={W-16} y={H-8} textAnchor="end" fontSize={11} fill="#6a5030" fontFamily="Georgia,serif">
         {clef==="treble" ? "Clave de Sol" : "Clave de Fa"}
@@ -983,7 +1023,8 @@ export default function PianoGame() {
             gap:6,marginBottom:12,
           }}>
             {LEVELS.map((lv,i)=>{
-              const isActive=i===levelIdx, isLocked=i>levelIdx, isDone=i<levelIdx;
+              // TODO: remove for production
+              const isActive=i===levelIdx, isLocked=i>levelIdx && i>=6, isDone=i<levelIdx;
               return (
                 <div key={lv.id} style={{
                   background:isActive?"#1e1408":"#120a04",
