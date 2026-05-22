@@ -711,6 +711,12 @@ export default function PianoGame() {
     } catch(_){}
   }
 
+  function resetGame() {
+    try { localStorage.removeItem(STORAGE_KEY); } catch(_){}
+    setLevelIdx(0); setSubLevel(0); setKeySigIdx(0);
+    setStats({}); setCanLevelUp(false); setScreen("menu");
+  }
+
   // ── Current key signature (only relevant in level 7)
   const isKeySigLevel = LEVELS[levelIdx]?.keySigMode;
   const currentKeySig = isKeySigLevel ? KEY_SIGNATURES[keySigIdx] : null;
@@ -1070,6 +1076,11 @@ export default function PianoGame() {
               border:"1.5px solid #3a2810",background:"transparent",
               color:"#7a6040",fontSize:isTablet?14:12,cursor:"pointer",fontFamily:"Georgia,serif",
             }}>📊 Stats</button>
+            <button onClick={()=>{ if(window.confirm("¿Reiniciar todo el progreso?")) resetGame(); }} style={{
+              padding:isTablet?"12px 20px":"10px 16px",borderRadius:28,
+              border:"1.5px solid #3a2810",background:"transparent",
+              color:"#5a4030",fontSize:isTablet?13:11,cursor:"pointer",fontFamily:"Georgia,serif",
+            }}>↺ Reiniciar</button>
           </div>
 
           {subLevel > 0 && (
@@ -1103,7 +1114,13 @@ export default function PianoGame() {
                 )}
               </div>
             ) : (
-              <div style={{fontSize:12,color:"#f5c842"}}>🏆 ¡Nivel máximo alcanzado!</div>
+              <div style={{textAlign:"center"}}>
+                <div style={{fontSize:12,color:"#f5c842",marginBottom:8}}>🏆 ¡Nivel máximo alcanzado!</div>
+                <button onClick={()=>{ if(window.confirm("¿Reiniciar todo el progreso?")) resetGame(); }} style={{
+                  padding:"7px 20px",borderRadius:24,border:"1.5px solid #6a3020",
+                  background:"transparent",color:"#a06040",fontSize:11,cursor:"pointer",fontFamily:"Georgia,serif",
+                }}>↺ Volver a empezar</button>
+              </div>
             )}
           </div>
         </div>
