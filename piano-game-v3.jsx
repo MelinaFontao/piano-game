@@ -285,7 +285,7 @@ function enharmonicNote(note) {
 // ─────────────────────────────────────────────────────────────────────────────
 // STAFF SVG
 // ─────────────────────────────────────────────────────────────────────────────
-function KeySigSymbols({ clef, keySig, y, startX }) {
+function KeySigSymbols({ clef, keySig, y, startX, sp }) {
   if (!keySig || (keySig.sharps.length === 0 && keySig.flats.length === 0)) return null;
   const isSharp = keySig.sharps.length > 0;
   const symbols = isSharp ? keySig.sharps : keySig.flats;
@@ -298,8 +298,8 @@ function KeySigSymbols({ clef, keySig, y, startX }) {
         <text
           key={i}
           x={x0 + i * 11}
-          y={y(positions[i]) + 4}
-          fontSize={13}
+          y={y(positions[i]) + sp * 0.4}
+          fontSize={sp * 1.3}
           fontFamily="serif"
           fill="#d4b870"
           style={{userSelect:"none"}}
@@ -309,26 +309,26 @@ function KeySigSymbols({ clef, keySig, y, startX }) {
   );
 }
 
-function Staff({ clef, notes, showLabel, keySig }) {
-  const W=300, H=130, sp=10, top=30;
-  const y = line => top + (line-4)*(sp/2);
-  const staffLines = [4,5,6,7,8];
-  const staffData = clef==="treble" ? TREBLE_STAFF : BASS_STAFF;
+function Staff({ clef, notes, showLabel, keySig, isLandscape }) {
+  const W = 300;
+  const H = isLandscape ? 160 : 260;
+  const sp = isLandscape ? 16 : 26;
+  const top = sp * 3;
+  const y = line => top + (line - 4) * (sp / 2);
+  const staffLines = [4, 5, 6, 7, 8];
+  const staffData = clef === "treble" ? TREBLE_STAFF : BASS_STAFF;
 
-  // How much space does the key sig take?
   const keySigCount = keySig ? Math.max(keySig.sharps.length, keySig.flats.length) : 0;
   const keySigWidth = keySigCount > 0 ? 52 + keySigCount * 11 + 8 : 0;
-  const noteX = keySigCount > 0 ? (52 + keySigCount * 11 + 20) : W/2;
+  const noteX = keySigCount > 0 ? (52 + keySigCount * 11 + 20) : W / 2;
 
   const noteInfos = notes.map(n => {
-    // For key sig mode: written note has no accidental, find by natural name
-    const naturalN = n.replace(/#|b/g,"").replace(/(\d)/,"$1"); // strip acc if any
+    const naturalN = n.replace(/#|b/g, "").replace(/(\d)/, "$1");
     let info = staffData.find(d => d.note === n);
     if (!info) {
       const enh = enharmonicNote(n);
       if (enh) info = staffData.find(d => d.note === enh);
     }
-    // Also try matching by natural note (written note without accidentals)
     if (!info) {
       info = staffData.find(d => d.note === naturalN);
     }
@@ -336,50 +336,44 @@ function Staff({ clef, notes, showLabel, keySig }) {
   }).filter(Boolean);
 
   const ledgerLines = new Set();
-  noteInfos.forEach(info => { if(info.ledger) ledgerLines.add(info.line); });
+  noteInfos.forEach(info => { if (info.ledger) ledgerLines.add(info.line); });
 
   return (
-    <svg viewBox={`0 0 ${W} ${H}`} width="100%" style={{maxWidth:300}}>
-      {/* Key signature symbols */}
-      <KeySigSymbols clef={clef} keySig={keySig} y={y} startX={52} />
+    <svg viewBox={`0 0 ${W} ${H}`} width="100%" style={{maxWidth: 300}}>
+      <KeySigSymbols clef={clef} keySig={keySig} y={y} startX={52} sp={sp} />
 
-      {/* Staff lines */}
-      {staffLines.map(l=>(
-        <line key={l} x1={14} x2={W-14} y1={y(l)} y2={y(l)} stroke="#b09870" strokeWidth={1.2}/>
+      {staffLines.map(l => (
+        <line key={l} x1={14} x2={W - 14} y1={y(l)} y2={y(l)} stroke="#b09870" strokeWidth={1.2} />
       ))}
 
-      {/* Clef drawn after staff lines so it renders on top */}
-      {clef==="treble" ? (
-        <text x={10} y={-4} fontSize={68} fontFamily="serif" fill="#d4c4a0" style={{userSelect:"none"}}>𝄞</text>
+      {clef === "treble" ? (
+        <text x={10} y={-sp * 0.4} fontSize={sp * 6.8} fontFamily="serif" fill="#d4c4a0" style={{userSelect: "none"}}>𝄞</text>
       ) : (
-        <text x={14} y={y(4)+sp*3.2} fontSize={sp*5} fontFamily="serif" fill="#d4c4a0" style={{userSelect:"none"}}>𝄢</text>
+        <text x={14} y={y(4) + sp * 3.2} fontSize={sp * 5} fontFamily="serif" fill="#d4c4a0" style={{userSelect: "none"}}>𝄢</text>
       )}
 
-      {/* Ledger lines */}
-      {[...ledgerLines].map(l=>(
-        <line key={`led${l}`} x1={noteX-22} x2={noteX+22} y1={y(l)} y2={y(l)} stroke="#b09870" strokeWidth={1.5}/>
+      {[...ledgerLines].map(l => (
+        <line key={`led${l}`} x1={noteX - sp * 2.2} x2={noteX + sp * 2.2} y1={y(l)} y2={y(l)} stroke="#b09870" strokeWidth={1.5} />
       ))}
 
-      {/* Notes */}
       {noteInfos.map((info, i) => {
-        const xOff = noteInfos.length > 1 ? (i===0 ? -14 : 14) : 0;
+        const xOff = noteInfos.length > 1 ? (i === 0 ? -sp * 1.4 : sp * 1.4) : 0;
         const nx = noteX + xOff;
         const ny = y(info.line);
-        // In keySig mode: never show accidental on note itself
         const showAcc = keySig ? false : !!info.acc;
         return (
           <g key={`${info.note}-${i}`}>
-            <ellipse cx={nx} cy={ny} rx={16} ry={12} fill="#f5c84228"/>
-            <ellipse cx={nx} cy={ny} rx={9} ry={6.5} fill="#f5c842" stroke="#c89000" strokeWidth={1.5}/>
-            <line x1={nx+9} y1={ny} x2={nx+9} y2={ny-30} stroke="#f5c842" strokeWidth={1.8}/>
+            <ellipse cx={nx} cy={ny} rx={sp * 1.6} ry={sp * 1.2} fill="#f5c84228" />
+            <ellipse cx={nx} cy={ny} rx={sp * 0.9} ry={sp * 0.65} fill="#f5c842" stroke="#c89000" strokeWidth={1.5} />
+            <line x1={nx + sp * 0.9} y1={ny} x2={nx + sp * 0.9} y2={ny - sp * 3} stroke="#f5c842" strokeWidth={1.8} />
             {showAcc && (
-              <text x={nx-17} y={ny+4} fontSize={14} fontFamily="serif" fill="#f5a020"
-                style={{userSelect:"none"}}>
-                {info.acc==="#"?"♯":"♭"}
+              <text x={nx - sp * 1.7} y={ny + sp * 0.4} fontSize={sp * 1.4} fontFamily="serif" fill="#f5a020"
+                style={{userSelect: "none"}}>
+                {info.acc === "#" ? "♯" : "♭"}
               </text>
             )}
             {showLabel && (
-              <text x={nx} y={ny+22} textAnchor="middle" fontSize={10}
+              <text x={nx} y={ny + sp * 2.2} textAnchor="middle" fontSize={sp}
                 fontFamily="Georgia,serif" fill="#f5c842" fontWeight="bold">
                 {noteLabel(info.note)}
               </text>
@@ -388,8 +382,8 @@ function Staff({ clef, notes, showLabel, keySig }) {
         );
       })}
 
-      <text x={W-10} y={H-6} textAnchor="end" fontSize={9} fill="#6a5030" fontFamily="Georgia,serif">
-        {clef==="treble"?"Clave de Sol":"Clave de Fa"}
+      <text x={W - 10} y={H - sp * 0.6} textAnchor="end" fontSize={sp * 0.9} fill="#6a5030" fontFamily="Georgia,serif">
+        {clef === "treble" ? "Clave de Sol" : "Clave de Fa"}
       </text>
     </svg>
   );
@@ -936,8 +930,8 @@ export default function PianoGame() {
   const headerSize  = isLandscape && !isTablet ? 17 : 24;
   const showSubtitle = !(isLandscape && !isTablet);
   const badgeFontSz = isTablet ? 13 : 11;
-  const vPad        = isLandscape && !isTablet ? "5px 10px 8px" : "12px 10px 24px";
-  const gap         = isLandscape && !isTablet ? 4 : 8;
+  const gap            = isTablet ? 8 : 4;
+  const isMobilePortrait = !isTablet && !isLandscape;
 
   const timerPct = timeLeft!==null && beatDur ? Math.max(0,(timeLeft/beatDur)*100) : 100;
 
@@ -947,12 +941,17 @@ export default function PianoGame() {
 
   return (
     <div style={{
-      minHeight:"100vh",
+      minHeight: isMobilePortrait ? "unset" : "100vh",
+      height: isMobilePortrait ? "100vh" : undefined,
       background:"radial-gradient(ellipse at 25% 15%,#201408 0%,#0e0804 65%,#060402 100%)",
       fontFamily:"Georgia,'Times New Roman',serif",
       color:"#e8dcc8",
       display:"flex",flexDirection:"column",alignItems:"center",
-      padding: vPad,
+      justifyContent: isMobilePortrait ? "flex-start" : undefined,
+      paddingTop: "env(safe-area-inset-top, 12px)",
+      paddingRight: "10px",
+      paddingBottom: isLandscape && !isTablet ? "8px" : "24px",
+      paddingLeft: "10px",
       overflowX:"hidden", overflowY:"auto", boxSizing:"border-box",
     }}>
 
@@ -970,7 +969,7 @@ export default function PianoGame() {
 
       {/* Badge */}
       <div style={{
-        display:"flex",gap:6,alignItems:"center",marginBottom:gap,
+        display:"flex",gap:6,alignItems:"center",marginBottom:isMobilePortrait?4:gap,
         background:"#160e04",border:"1px solid #3a2810",
         borderRadius:20,padding:"3px 10px",fontSize:badgeFontSz,
         flexWrap:"wrap",justifyContent:"center",maxWidth:"98%",
@@ -993,18 +992,21 @@ export default function PianoGame() {
       </div>
 
       {/* Score */}
-      <div style={{display:"flex",gap:16,marginBottom:gap,fontSize:isTablet?14:12}}>
+      <div style={{display:"flex",gap:16,marginBottom:isMobilePortrait?4:gap,fontSize:isTablet?14:12}}>
         <span>⭐ <b style={{color:"#f5c842"}}>{sessionScore}</b></span>
         <span>🔥 <b style={{color:streak>=10?"#f5c842":streak>=5?"#f0a030":"#e8dcc8"}}>{streak}</b>/20</span>
       </div>
 
       {/* Menu */}
       {screen==="menu" && (
-        <div style={{width:"100%",maxWidth:isTablet?520:390,marginBottom:12,overflowY:"auto"}}>
+        <div style={{width:"100%",maxWidth:isTablet?520:390,marginBottom:isMobilePortrait?6:12,overflowY:"auto"}}>
           <div style={{
             display:"grid",
             gridTemplateColumns: isLandscape||isTablet ? "1fr 1fr" : "1fr",
-            gap:6,marginBottom:12,
+            gap:isMobilePortrait?3:6, marginBottom:isMobilePortrait?6:12,
+            overflowY:"auto",
+            maxHeight:"calc(100vh - 320px)",
+            WebkitOverflowScrolling:"touch",
           }}>
             {LEVELS.map((lv,i)=>{
               const isActive=i===levelIdx, isLocked=i>levelIdx, isDone=i<levelIdx;
@@ -1031,7 +1033,7 @@ export default function PianoGame() {
             })}
           </div>
 
-          <div style={{display:"flex",gap:10,justifyContent:"center",flexWrap:"wrap",marginBottom:10}}>
+          <div style={{display:"flex",gap:isMobilePortrait?5:10,justifyContent:"center",flexWrap:"wrap",marginBottom:isMobilePortrait?5:10}}>
             <button onClick={startPlaying} style={{
               padding:isTablet?"12px 34px":"10px 26px",borderRadius:28,
               border:"2px solid #f5c842",background:"linear-gradient(135deg,#c89000,#f5c842)",
@@ -1076,11 +1078,11 @@ export default function PianoGame() {
         <button onClick={()=>{ clearTimeout(timerRef.current); clearTimeout(advanceRef.current); setScreen("menu"); }}
           style={{padding:"4px 12px",borderRadius:14,border:"1px solid #2a1808",
             background:"transparent",color:"#5a4020",fontSize:10,
-            cursor:"pointer",marginBottom:gap,fontFamily:"Georgia,serif",
+            cursor:"pointer",marginBottom:isMobilePortrait?4:gap,fontFamily:"Georgia,serif",
           }}>← Menú</button>
 
         {beatDur && (
-          <div style={{width:"100%",maxWidth:staffMaxW,height:5,background:"#1e1008",borderRadius:3,marginBottom:gap}}>
+          <div style={{width:"100%",maxWidth:staffMaxW,height:5,background:"#1e1008",borderRadius:3,marginBottom:isMobilePortrait?4:gap}}>
             <div style={{height:"100%",width:`${timerPct}%`,borderRadius:3,
               background:timerPct>50?"#f5c842":timerPct>20?"#f09020":"#f04030",
               transition:"width 0.1s linear,background 0.4s"}}/>
@@ -1091,10 +1093,11 @@ export default function PianoGame() {
           <div style={{
             width:"100%",maxWidth:staffMaxW,
             background:"#120a02",border:"1.5px solid #2e1c08",
-            borderRadius:12,padding:isLandscape&&!isTablet?"2px 8px":"5px 10px",
-            marginBottom:gap,boxShadow:"0 4px 24px rgba(0,0,0,0.7)",
+            borderRadius:12,padding:isLandscape?"2px 8px":"5px 10px",
+            marginBottom:isMobilePortrait?4:gap,boxShadow:"0 4px 24px rgba(0,0,0,0.7)",
+            overflow:"visible",
           }}>
-            <Staff clef={currentClef} notes={currentWrittenNotes} showLabel={level.showLabel} keySig={currentKeySig}/>
+            <Staff clef={currentClef} notes={currentWrittenNotes} showLabel={level.showLabel} keySig={currentKeySig} isLandscape={isLandscape}/>
           </div>
         )}
 
@@ -1104,7 +1107,7 @@ export default function PianoGame() {
           </div>
         )}
 
-        <div style={{height:18,display:"flex",alignItems:"center",marginBottom:gap/2}}>
+        <div style={{height:18,display:"flex",alignItems:"center",marginBottom:isMobilePortrait?2:gap/2}}>
           {feedbackMsg && (
             <span style={{fontSize:12,
               color:feedbackMsg.startsWith("✓")?"#70d070":feedbackMsg.startsWith("⏱")?"#f09040":"#f07060",
