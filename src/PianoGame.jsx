@@ -962,9 +962,9 @@ export default function PianoGame() {
   const pianoH      = isLandscape ? (isTablet ? 160 : 115) : (isTablet ? 160 : 110);
   const staffMaxW   = isWide ? 480 : isTablet ? 400 : isLandscape ? 360 : 320;
   const pianoMaxW   = isWide ? 1000 : isTablet ? 860 : 720;
-  const headerSize  = isLandscape && !isTablet ? 17 : 24;
+  const headerSize  = isLandscape && !isTablet ? 19 : 26;
   const showSubtitle = !(isLandscape && !isTablet);
-  const badgeFontSz = isTablet ? 13 : 11;
+  const badgeFontSz = isTablet ? 15 : 13;
   const gap            = isTablet ? 8 : 4;
   const isMobilePortrait = !isTablet && !isLandscape;
 
@@ -999,7 +999,7 @@ export default function PianoGame() {
       {/* Header */}
       <div style={{textAlign:"center",marginBottom:gap}}>
         <div style={{fontSize:headerSize,letterSpacing:5,color:"#f5c842",lineHeight:1.1}}>♩ PARTITURA</div>
-        {showSubtitle && <div style={{fontSize:9,letterSpacing:5,color:"#6a5030",marginTop:1}}>LECTURA DE NOTAS</div>}
+        {showSubtitle && <div style={{fontSize:11,letterSpacing:5,color:"#6a5030",marginTop:1}}>LECTURA DE NOTAS</div>}
       </div>
 
       {/* Badge */}
@@ -1015,19 +1015,19 @@ export default function PianoGame() {
         {isKeySigLevel && currentKeySig && (<>
           <span style={{color:"#3a2810"}}>|</span>
           <span style={{color:"#d4b870"}}>{currentKeySig.name}</span>
-          <span style={{color:"#4a3020",fontSize:9}}>({currentKeySig.display})</span>
+          <span style={{color:"#4a3020",fontSize:11}}>({currentKeySig.display})</span>
           <span style={{color:"#3a2810"}}>|</span>
-          <span style={{color:"#5a4020",fontSize:9}}>{keySigIdx+1}/15</span>
+          <span style={{color:"#5a4020",fontSize:11}}>{keySigIdx+1}/15</span>
         </>)}
         <span style={{color:"#3a2810"}}>|</span>
         <span style={{color:"#7a6040"}}>
           {subLevel===0?"♾":"⏱ "+SUB_TIMES[subLevel]+"s"}
-          {" "}<span style={{color:"#4a3020",fontSize:9}}>({subLevel+1}/{SUB_TIMES.length})</span>
+          {" "}<span style={{color:"#4a3020",fontSize:11}}>({subLevel+1}/{SUB_TIMES.length})</span>
         </span>
       </div>
 
       {/* Score */}
-      <div style={{display:"flex",gap:16,marginBottom:isMobilePortrait?4:gap,fontSize:isTablet?14:12}}>
+      <div style={{display:"flex",gap:16,marginBottom:isMobilePortrait?4:gap,fontSize:isTablet?16:14}}>
         <span>⭐ <b style={{color:"#f5c842"}}>{sessionScore}</b></span>
         <span>🔥 <b style={{color:streak>=10?"#f5c842":streak>=5?"#f0a030":"#e8dcc8"}}>{streak}</b>/20</span>
       </div>
@@ -1053,13 +1053,13 @@ export default function PianoGame() {
                   display:"flex",justifyContent:"space-between",alignItems:"center",
                 }}>
                   <div>
-                    <div style={{fontSize:isTablet?13:11,color:isActive?"#f5c842":isDone?"#60a050":"#7a6040"}}>
+                    <div style={{fontSize:isTablet?15:13,color:isActive?"#f5c842":isDone?"#60a050":"#7a6040"}}>
                       {isDone?"✓ ":isActive?"▶ ":"🔒 "}{lv.id}. {lv.name}
                     </div>
-                    <div style={{fontSize:9,color:"#4a3020",marginTop:1}}>{lv.description}</div>
+                    <div style={{fontSize:11,color:"#4a3020",marginTop:1}}>{lv.description}</div>
                   </div>
                   {isActive && (
-                    <div style={{fontSize:9,color:"#5a4020",textAlign:"right",marginLeft:6}}>
+                    <div style={{fontSize:11,color:"#5a4020",textAlign:"right",marginLeft:6}}>
                       {lv.keySigMode?`${keySigIdx+1}/15`:`${subLevel+1}/${SUB_TIMES.length}`}
                     </div>
                   )}
@@ -1072,19 +1072,19 @@ export default function PianoGame() {
             <button onClick={startPlaying} style={{
               padding:isTablet?"12px 34px":"10px 26px",borderRadius:28,
               border:"2px solid #f5c842",background:"linear-gradient(135deg,#c89000,#f5c842)",
-              color:"#0e0804",fontSize:isTablet?15:13,fontWeight:"bold",
+              color:"#0e0804",fontSize:isTablet?17:15,fontWeight:"bold",
               letterSpacing:2,cursor:"pointer",fontFamily:"Georgia,serif",
               boxShadow:"0 4px 24px #f5c84240",
             }}>▶ JUGAR</button>
             <button onClick={()=>setScreen("stats")} style={{
               padding:isTablet?"12px 20px":"10px 16px",borderRadius:28,
               border:"1.5px solid #3a2810",background:"transparent",
-              color:"#7a6040",fontSize:isTablet?14:12,cursor:"pointer",fontFamily:"Georgia,serif",
+              color:"#7a6040",fontSize:isTablet?16:14,cursor:"pointer",fontFamily:"Georgia,serif",
             }}>📊 Stats</button>
             <button onClick={()=>{ if(window.confirm("¿Reiniciar todo el progreso?")) resetGame(); }} style={{
               padding:isTablet?"12px 20px":"10px 16px",borderRadius:28,
               border:"1.5px solid #3a2810",background:"transparent",
-              color:"#5a4030",fontSize:isTablet?13:11,cursor:"pointer",fontFamily:"Georgia,serif",
+              color:"#5a4030",fontSize:isTablet?15:13,cursor:"pointer",fontFamily:"Georgia,serif",
             }}>↺ Reiniciar</button>
           </div>
 
@@ -1093,7 +1093,7 @@ export default function PianoGame() {
               <button onClick={continuePlaying} style={{
                 padding:isTablet?"9px 22px":"7px 18px",borderRadius:28,
                 border:"1.5px solid #6a9060",background:"#0e1a0c",
-                color:"#80c070",fontSize:isTablet?13:11,cursor:"pointer",fontFamily:"Georgia,serif",
+                color:"#80c070",fontSize:isTablet?15:13,cursor:"pointer",fontFamily:"Georgia,serif",
               }}>
                 ↩ Continuar sesión anterior · sub {subLevel+1} · {SUB_TIMES[subLevel]}s
               </button>
@@ -1104,26 +1104,26 @@ export default function PianoGame() {
             {canLevelUp && levelIdx<LEVELS.length-1 ? (
               <button onClick={handleLevelUp} style={{
                 padding:"7px 20px",borderRadius:24,border:"2px solid #50b850",
-                background:"#50b85018",color:"#70d870",fontSize:12,cursor:"pointer",fontFamily:"Georgia,serif",
+                background:"#50b85018",color:"#70d870",fontSize:14,cursor:"pointer",fontFamily:"Georgia,serif",
               }}>🆙 Subir al Nivel {levelIdx+2}</button>
             ) : levelIdx<LEVELS.length-1 ? (
               <div>
                 <button onClick={()=>setLevelUpBlocked(true)} style={{
                   padding:"7px 20px",borderRadius:24,border:"1px solid #3a2810",
-                  background:"transparent",color:"#3a2810",fontSize:12,cursor:"not-allowed",fontFamily:"Georgia,serif",
+                  background:"transparent",color:"#3a2810",fontSize:14,cursor:"not-allowed",fontFamily:"Georgia,serif",
                 }}>🔒 Subir de nivel</button>
                 {levelUpBlocked && (
-                  <div style={{fontSize:10,color:"#a07040",marginTop:5,maxWidth:280,margin:"5px auto 0"}}>
+                  <div style={{fontSize:12,color:"#a07040",marginTop:5,maxWidth:280,margin:"5px auto 0"}}>
                     💪 ¡Seguí practicando! Necesitás 20 seguidas en el subnivel {SUB_TIMES.length} (3s) para subir.
                   </div>
                 )}
               </div>
             ) : (
               <div style={{textAlign:"center"}}>
-                <div style={{fontSize:12,color:"#f5c842",marginBottom:8}}>🏆 ¡Nivel máximo alcanzado!</div>
+                <div style={{fontSize:14,color:"#f5c842",marginBottom:8}}>🏆 ¡Nivel máximo alcanzado!</div>
                 <button onClick={()=>{ if(window.confirm("¿Reiniciar todo el progreso?")) resetGame(); }} style={{
                   padding:"7px 20px",borderRadius:24,border:"1.5px solid #6a3020",
-                  background:"transparent",color:"#a06040",fontSize:11,cursor:"pointer",fontFamily:"Georgia,serif",
+                  background:"transparent",color:"#a06040",fontSize:13,cursor:"pointer",fontFamily:"Georgia,serif",
                 }}>↺ Volver a empezar</button>
               </div>
             )}
